@@ -1,7 +1,10 @@
 package application;
 
+import java.util.List;
+
 import model.dao.DaoFactory;
 import model.dao.SellerDao;
+import model.entities.Department;
 import model.entities.Seller;
 
 public class Program {
@@ -13,30 +16,17 @@ public class Program {
 		System.out.println("=== TEST 1: seller findById ===");
 		Seller seller = sellerDao.findById(3);
 		System.out.println(seller);
+		System.out.println();
 		
-		
-		
-		
-		/*
-		Connection conn = null; 
-		Statement st = null; 
-		ResultSet rt = null;
-		
-		try {
-			if(conn == null) {
-				conn = DB.getConnection();
-				
-				st = conn.createStatement();
-				rt = st.executeQuery("Select * from seller");
-				while(rt.next()) {
-					System.out.println(rt.getString("Name"));
-				}
-			}
-		}
-		catch(SQLException e) {
-			throw new DbException(e.getMessage());
+		System.out.println("=== TEST2: seller findByDepartment ===");
+		Department department = new Department(2,null);
+		List<Seller> list = sellerDao.findByDepartment(department);
+		for(Seller obj : list) {
+			System.out.println(obj);
 		}
 		
-		*/
+		
+		
+		
 	}
 }
