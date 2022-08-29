@@ -1,11 +1,12 @@
 package model.dao.impl;
 
-import java.lang.invoke.LambdaConversionException;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 import db.DB;
@@ -119,8 +120,30 @@ public class DepartmentDaoJDBC implements DepartmentDao {
 
 	@Override
 	public List<Department> findAll() {
-		// TODO Auto-generated method stub
-		return null;
+		PreparedStatement st = null;
+		List<Department> departmentList = new ArrayList<>();
+		try {
+			st = conn.prepareStatement("SELECT * from department");
+			ResultSet rs = st.executeQuery();
+			while(rs.next()) {
+				Integer id = rs.getInt("Id");
+				String name = rs.getString("Name");
+				Department department = new Department(id, name);
+				departmentList.add(department);
+			}
+			DB.closeResultSet(rs);
+			return departmentList;
+		}
+		catch(SQLException e) {
+			throw new DbException(e.getMessage());
+		}
+		finally {
+			DB.closeStatement(st);
+			
+		}
+		
+	
+		
 	}
 	
 	public Department instanciableDepartment(ResultSet rs) throws SQLException {
