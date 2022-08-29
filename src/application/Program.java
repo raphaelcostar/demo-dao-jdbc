@@ -1,7 +1,7 @@
 package application;
 
-import java.util.Date;
 import java.util.List;
+import java.util.Scanner;
 
 import model.dao.DaoFactory;
 import model.dao.SellerDao;
@@ -11,6 +11,8 @@ import model.entities.Seller;
 public class Program {
 	
 	public static void main(String[] args) {
+		
+		Scanner sc = new Scanner(System.in);
 		
 		SellerDao sellerDao = DaoFactory.createSellerDao();
 		
@@ -34,10 +36,29 @@ public class Program {
 			System.out.println(obj);
 		}
 		
+		/*
 		System.out.println("=== TEST 4: seller insert ===");
 		Seller newSeller = new Seller(null, "Raphael", "raphael@gmail.com", new Date(), 4000.0, department);
 		sellerDao.insert(newSeller);
 		System.out.println("Inserted Id" + newSeller.getId());
+		*/
+	
+		/*
+		System.out.println("=== TEST 5: seller update ===");
+		Seller updateSeller = new Seller(12,"Folukinha", "folukinha@gmail.com", new Date(), 4000.0, department);
+		sellerDao.update(updateSeller);
+		System.out.println(updateSeller);
+		*/
 		
+		System.out.println("=== TEST 6: seller delete ===");
+		System.out.print("Digite o Id do usário que você deseja deletar ");
+		Integer id = sc.nextInt();
+		Seller findById = sellerDao.findById(id);
+		System.out.println(findById);
+		sellerDao.deleteById(id);
+		
+		
+		}
 	}
-}
+	
+
