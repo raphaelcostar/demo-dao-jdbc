@@ -1,5 +1,6 @@
 package model.dao.impl;
 
+import java.lang.invoke.LambdaConversionException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -74,14 +75,46 @@ public class DepartmentDaoJDBC implements DepartmentDao {
 
 	@Override
 	public void deleteById(Integer id) {
-		// TODO Auto-generated method stub
+		PreparedStatement st = null;
+		
+		try {
+			st = conn.prepareStatement("DELETE FROM department WHERE Id = ?");
+			st.setInt(1, id);
+			
+			st.executeUpdate();
+		}
+		catch(SQLException e) {
+			throw new DbException(e.getMessage());
+		}
+		finally {
+			DB.closeStatement(st);
+		}
 
 	}
 
 	@Override
 	public Department findById(Integer id) {
-		// TODO Auto-generated method stub
-		return null;
+		PreparedStatement st = null;
+		ResultSet rs = null;
+		
+		try {
+			st = conn.prepareStatement("SELECT * from department WHERE Id = ?");
+			st.setInt(1, id);
+			rs = st.executeQuery();
+			if(rs.next()) {
+				Department dp = instanciableDepartment(rs);
+				return dp;
+			}
+			return null;
+		}
+		catch(SQLException e) {
+			throw new DbException(e.getMessage());
+		}
+		finally {
+			DB.closeResultSet(rs);
+			DB.closeStatement(st);
+		}
+		
 	}
 
 	@Override
@@ -89,5 +122,13 @@ public class DepartmentDaoJDBC implements DepartmentDao {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
+	
+	public Department instanciableDepartment(ResultSet rs) throws SQLException {
+		Department dp = new Department();	
+		dp.setId(rs.getInt("Id"));
+		dp.setName(rs.getString("Name"));
+		return dp;
+	}
+		
+	
 }
